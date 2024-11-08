@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    container_name: my-node-app
+    ports:
+      - "3000:3000"  # Expose port 3000 on your local machine
+    volumes:
+      - .:/app  # Mount the local directory to /app inside the container
+    networks:
+      - mynetwork
+    depends_on:
+      - mongo  # Start the MongoDB service first
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"  # MongoDB default port
+    volumes:
+      - ./data/db:/data/db  # Persist MongoDB data
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
